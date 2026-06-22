@@ -1,0 +1,10 @@
+# 依赖与构建产物
+node_modules/
+*.log
+
+# 操作系统/编辑器
+.DS_Store
+.vscode/
+.idea/
+
+# 注意：data/gold_prices.json 需要进版本控制（Pages 运行时 fetch 它、Action 每天更新它），故不忽略。

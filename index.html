@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>今日金价 · 黄金价格参考</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C8A15A', light: '#E8D5A8', dark: '#A8853F' },
+            up: '#D14343',   // 红涨
+            down: '#3A9D5D', // 绿跌
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background: linear-gradient(180deg, #FBF8F1 0%, #F5F0E6 100%); }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 antialiased">
+  <main class="mx-auto max-w-4xl px-4 py-8 space-y-6">
+
+    <!-- 标题 -->
+    <header class="text-center">
+      <h1 class="text-2xl font-bold text-gold-dark">今日金价</h1>
+      <p class="text-sm text-slate-500 mt-1">黄金9999 与各品牌价格参考 · 数据每日更新</p>
+    </header>
+
+    <!-- Hero：黄金9999 -->
+    <section id="hero" class="rounded-2xl bg-white/80 shadow-sm ring-1 ring-gold-light/60 p-6">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div class="text-sm text-slate-500">黄金9999（大盘）<span id="hero-date" class="ml-1"></span></div>
+          <div class="mt-1 flex items-baseline gap-3">
+            <span id="hero-price" class="text-4xl font-bold text-gold-dark tabular-nums">—</span>
+            <span class="text-slate-400 text-lg">元/克</span>
+            <span id="hero-change" class="text-lg font-semibold tabular-nums">—</span>
+          </div>
+        </div>
+      </div>
+      <div id="hero-chart" class="mt-4 h-56 w-full"></div>
+    </section>
+
+    <!-- 品牌价列表 -->
+    <section class="rounded-2xl bg-white/80 shadow-sm ring-1 ring-gold-light/60 p-6">
+      <h2 class="text-lg font-semibold text-slate-700 mb-3">各品牌今日价格</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-400 border-b border-slate-100">
+              <th class="py-2 font-medium">品牌</th>
+              <th class="py-2 font-medium text-right">最新价（元/克）</th>
+              <th class="py-2 font-medium text-right">今日涨跌</th>
+              <th class="py-2 font-medium text-right hidden sm:table-cell">日期</th>
+            </tr>
+          </thead>
+          <tbody id="brand-rows" class="divide-y divide-slate-50"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 多线对比折线图 -->
+    <section class="rounded-2xl bg-white/80 shadow-sm ring-1 ring-gold-light/60 p-6">
+      <h2 class="text-lg font-semibold text-slate-700 mb-3">走势对比</h2>
+      <div id="compare-checkboxes" class="flex flex-wrap gap-x-4 gap-y-2 mb-3"></div>
+      <div id="compare-ranges" class="flex gap-2 mb-2"></div>
+      <div id="compare-chart" class="h-72 w-full"></div>
+    </section>
+
+    <!-- 品牌简介 -->
+    <section class="rounded-2xl bg-white/80 shadow-sm ring-1 ring-gold-light/60 p-6">
+      <h2 class="text-lg font-semibold text-slate-700 mb-3">品牌简介</h2>
+      <ul id="brand-intros" class="list-disc pl-5 space-y-2 text-sm text-slate-600 leading-relaxed"></ul>
+    </section>
+
+    <p id="error" class="hidden text-center text-up text-sm"></p>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "gold-price-monitor",
+  "version": "1.0.0",
+  "description": "面向普通消费者的金价监控单页站",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "init-data": "node scripts/fetch_history.js",
+    "update": "node scripts/update_daily.js"
+  }
+}
