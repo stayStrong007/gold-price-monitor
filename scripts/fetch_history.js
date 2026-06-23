@@ -8,6 +8,7 @@ import {
   generateDateRange,
   todayInBeijing,
 } from './fetch.js';
+import { fillHistoricalGaps } from './fill.js';
 
 (async () => {
   const allData = [];
@@ -41,10 +42,12 @@ import {
     console.log('❌ 黄金9999: 未采集到数据');
   }
 
-  // ============ 保存结果 ============
+  // ============ 排序 + 填充历史缺口 + 保存 ============
   // 统一按日期升序（旧→新），让磁盘上的 JSON 顺序确定，下游无需各自处理
   for (const brand of allData) {
     brand.data.sort((a, b) => a.date.localeCompare(b.date));
+    // 填充该品牌自己区间内的历史缺口(不延伸末端)
+    brand.data = fillHistoricalGaps(brand.data);
   }
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/gold_prices.json', JSON.stringify(allData, null, 2));

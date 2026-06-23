@@ -72,8 +72,15 @@ export function fetchGold9999Price(dateStr) {
       let html = '';
       res.on('data', (chunk) => (html += chunk));
       res.on('end', () => {
-        const match = html.match(/黄金9999[\s\S]*?<div class="xj[^"]*">(\d+\.?\d*)/);
-        resolve(match ? parseFloat(match[1]) : null);
+        // 匹配带千位分隔符的价格,如 1,008 或 1,148.5 或 982.8
+        const match = html.match(/黄金9999[\s\S]*?<div class="xj[^"]*">([0-9,]+\.?[0-9]*)/);
+        if (match) {
+          // 去掉逗号后转数字
+          const priceStr = match[1].replace(/,/g, '');
+          resolve(parseFloat(priceStr));
+        } else {
+          resolve(null);
+        }
       });
     }).on('error', reject);
   });

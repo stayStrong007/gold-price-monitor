@@ -9,6 +9,7 @@ import {
   todayInBeijing,
 } from './fetch.js';
 import { mergeGoldData } from './merge.js';
+import { fillHistoricalGaps } from './fill.js';
 
 const DATA_PATH = 'data/gold_prices.json';
 
@@ -62,9 +63,15 @@ function lastDateOf(series) {
     console.log('ℹ️ 黄金9999: 本次无新增');
   }
 
-  // ============ 合并 + 写回 ============
-  const newData = mergeGoldData(oldData, freshData);
-  fs.writeFileSync(DATA_PATH, JSON.stringify(newData, null, 2));
-  const totalCount = newData.reduce((sum, b) => sum + b.data.length, 0);
+  // ============ 合并 + 填充历史缺口 + 写回 ============
+  const merged = mergeGoldData(oldData, freshData);
+
+  // 对每个品牌填充其自身区间内的历史缺口(不延伸末端)
+  for (const brand of merged) {
+    brand.data = fillHistoricalGaps(brand.data);
+  }
+
+  fs.writeFileSync(DATA_PATH, JSON.stringify(merged, null, 2));
+  const totalCount = merged.reduce((sum, b) => sum + b.data.length, 0);
   console.log(`\n✅ 更新完成，共 ${totalCount} 条数据写回 ${DATA_PATH}`);
 })();
